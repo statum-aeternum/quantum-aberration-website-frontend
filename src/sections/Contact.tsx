@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Contact as ContactType } from "../types";
 import { getContacts } from "../api";
 import StickyTitle from "../components/StickyTitle";
-import { Helmet } from "react-helmet";
 
 const Contact = () => {
   const [contacts, setContacts] = useState<ContactType[]>([]);
@@ -41,19 +40,6 @@ const Contact = () => {
 
   return (
     <>
-      <Helmet>
-        <title>Contact | Quantum Aberration</title>
-        <meta
-          name="description"
-          content="Contactez-nous pour toute demande de booking, collaboration ou information."
-        />
-        <meta property="og:title" content="Contact" />
-        <meta
-          property="og:description"
-          content="Contactez-nous pour toute demande de booking, collaboration ou information."
-        />
-        <meta property="og:type" content="section" />
-      </Helmet>
       <section
         id="contact"
         className="min-h-screen py-20 bg-space-950 relative"

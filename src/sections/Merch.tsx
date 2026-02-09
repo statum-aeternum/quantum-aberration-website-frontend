@@ -3,7 +3,6 @@ import { MerchItem } from "../types";
 import { getMerch } from "../api";
 import StickyTitle from "../components/StickyTitle";
 import ProductPopup from "../components/ProductPopup";
-import { Helmet } from "react-helmet";
 
 interface MerchProps {
   selectedProductSlug: string | null;
@@ -61,13 +60,6 @@ const Merch = ({
 
   return (
     <>
-      <Helmet>
-        <title>Merch | Quantum Aberration</title>
-        <meta name="description" content="Decouvrez notre merch" />
-        <meta property="og:title" content="Merch" />
-        <meta property="og:description" content="Decouvrez notre merch" />
-        <meta property="og:type" content="section" />
-      </Helmet>
       <section id="merch" className="min-h-screen py-20 bg-space-900 relative">
         <div className="container mx-auto px-6">
           <StickyTitle title="Merch" sectionId="merch" />

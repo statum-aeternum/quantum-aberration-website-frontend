@@ -3,7 +3,6 @@ import { NewsItem } from "../types";
 import { getNews } from "../api";
 import StickyTitle from "../components/StickyTitle";
 import NewsPopup from "../components/NewsPopup";
-import { Helmet } from "react-helmet";
 
 interface NewsProps {
   selectedNewsSlug: string | null;
@@ -70,13 +69,6 @@ const News = ({ selectedNewsSlug, onNewsClose, onNewsOpen }: NewsProps) => {
 
   return (
     <>
-      <Helmet>
-        <title>News | Quantum Aberration</title>
-        <meta name="description" content="Les news du groupe" />
-        <meta property="og:title" content="News" />
-        <meta property="og:description" content="Les news du groupe" />
-        <meta property="og:type" content="section" />
-      </Helmet>
       <section id="news" className="min-h-screen py-20 bg-space-950 relative">
         <div className="container mx-auto px-6">
           <StickyTitle title="News" sectionId="news" />

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import StickyTitle from "../components/StickyTitle";
 import GamePopup from "../components/GamePopup";
-import { Helmet } from "react-helmet";
 
 interface AboutProps {
   onMerchClick: (slug: string) => void;
@@ -17,19 +16,6 @@ const About = ({ onMerchClick }: AboutProps) => {
 
   return (
     <>
-      <Helmet>
-        <title>About | Quantum Aberration</title>
-        <meta
-          name="description"
-          content="Decouvrez plus sur le groupe Quantum Aberration"
-        />
-        <meta property="og:title" content="About" />
-        <meta
-          property="og:description"
-          content="Decouvrez plus sur le groupe Quantum Aberration"
-        />
-        <meta property="og:type" content="section" />
-      </Helmet>
       <section id="about" className="min-h-screen py-20 bg-space-900 relative">
         <div className="container mx-auto px-6">
           <StickyTitle title="About" sectionId="about" />
