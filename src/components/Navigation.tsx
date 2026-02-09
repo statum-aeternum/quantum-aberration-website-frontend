@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 
 interface NavigationProps {
   activeSection: string;
@@ -10,11 +9,11 @@ const Navigation = ({ activeSection, onSectionClick }: NavigationProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
 
   const sections = [
-    { id: "home", label: "Home", path: "/" },
-    { id: "about", label: "About", path: "/about" },
-    { id: "news", label: "News", path: "/news" },
-    { id: "merch", label: "Merch", path: "/merch" },
-    { id: "contact", label: "Contact", path: "/contact" },
+    { id: "home", label: "Home" },
+    { id: "about", label: "About" },
+    { id: "news", label: "News" },
+    { id: "merch", label: "Merch" },
+    { id: "contact", label: "Contact" },
   ];
 
   useEffect(() => {
@@ -36,8 +35,7 @@ const Navigation = ({ activeSection, onSectionClick }: NavigationProps) => {
         <ul className="flex justify-center space-x-8">
           {sections.map((section) => (
             <li key={section.id}>
-              <Link
-                to={section.path}
+              <button
                 onClick={() => onSectionClick(section.id)}
                 className={`text-lg font-medium transition-colors duration-300 hover:text-cosmic-purple ${
                   activeSection === section.id
@@ -46,7 +44,7 @@ const Navigation = ({ activeSection, onSectionClick }: NavigationProps) => {
                 }`}
               >
                 {section.label}
-              </Link>
+              </button>
             </li>
           ))}
         </ul>

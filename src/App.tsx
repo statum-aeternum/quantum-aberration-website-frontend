@@ -1,6 +1,4 @@
-import { useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-
+import { useState, useEffect } from "react";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
 import Home from "./sections/Home";
@@ -8,114 +6,87 @@ import About from "./sections/About";
 import News from "./sections/News";
 import Merch from "./sections/Merch";
 import Contact from "./sections/Contact";
-
 function App() {
-  const navigate = useNavigate();
-  const location = useLocation();
-
   const [activeSection, setActiveSection] = useState("home");
   const [selectedMerchSlug, setSelectedMerchSlug] = useState<string | null>(
     null,
   );
   const [selectedNewsSlug, setSelectedNewsSlug] = useState<string | null>(null);
+  useEffect(() => {
+    // Détecter la section depuis l'URL au chargement
+    const hash = window.location.hash.slice(1);
+    const [section, slug] = hash.split("/");
 
-  // 🔒 prevents router/scroll fighting
-  const isAutoScrolling = useRef(false);
-
-  const sections = ["home", "about", "news", "merch", "contact"];
-
-  // ✅ Real scroll completion detection
-  const scrollToSectionSmooth = (id: string) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-
-    isAutoScrolling.current = true;
-    el.scrollIntoView({ behavior: "smooth" });
-
-    const checkIfDone = () => {
-      const rect = el.getBoundingClientRect();
-      if (Math.abs(rect.top) < 4) {
-        window.removeEventListener("scroll", checkIfDone);
-        isAutoScrolling.current = false;
+    if (section) {
+      setActiveSection(section);
+      if (slug) {
+        if (section === "merch") {
+          setSelectedMerchSlug(slug);
+          setTimeout(() => scrollToSection("merch", true), 100);
+        }
+        if (section === "news") {
+          setSelectedNewsSlug(slug);
+          setTimeout(() => scrollToSection("news", true), 100);
+        }
       }
-    };
+    } else {
+      setActiveSection("home");
+    }
 
-    window.addEventListener("scroll", checkIfDone);
-  };
-
-  // ✅ URL → section + modal + scroll
-  useEffect(() => {
-    const parts = location.pathname.split("/").filter(Boolean);
-
-    const section = parts[0] || "home";
-    const slug = parts[1] || null;
-
-    setActiveSection(section);
-
-    if (section === "merch") setSelectedMerchSlug(slug);
-    else setSelectedMerchSlug(null);
-
-    if (section === "news") setSelectedNewsSlug(slug);
-    else setSelectedNewsSlug(null);
-
-    scrollToSectionSmooth(section);
-  }, [location]);
-
-  // ✅ User scroll → update URL (only when NOT auto scrolling)
-  useEffect(() => {
     const handleScroll = () => {
-      if (isAutoScrolling.current) return;
+      // Ne pas mettre à jour l'URL pendant le scroll si on a un slug actif
       if (selectedMerchSlug || selectedNewsSlug) return;
 
-      const scrollPosition = window.scrollY + 120;
-
+      const sections = ["home", "about", "news", "merch", "contact"];
+      const scrollPosition = window.scrollY + 100;
       for (const section of sections) {
-        const el = document.getElementById(section);
-        if (!el) continue;
-
-        const { offsetTop, offsetHeight } = el;
-
-        if (
-          scrollPosition >= offsetTop &&
-          scrollPosition < offsetTop + offsetHeight &&
-          activeSection !== section
-        ) {
-          setActiveSection(section);
-          navigate(section === "home" ? "/" : `/${section}`, {
-            replace: true,
-          });
-          break;
+        const element = document.getElementById(section);
+        if (element) {
+          const { offsetTop, offsetHeight } = element;
+          if (
+            scrollPosition >= offsetTop &&
+            scrollPosition < offsetTop + offsetHeight
+          ) {
+            if (activeSection !== section) {
+              setActiveSection(section);
+              window.history.replaceState(null, "", `#${section}`);
+            }
+            break;
+          }
         }
       }
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [activeSection, navigate, selectedMerchSlug, selectedNewsSlug]);
-
-  // ✅ Top nav clicks
-  const scrollToSection = (sectionId: string) => {
-    navigate(sectionId === "home" ? "/" : `/${sectionId}`);
+  }, [activeSection, selectedMerchSlug, selectedNewsSlug]);
+  const scrollToSection = (sectionId: string, skipUrlUpdate = false) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+      if (!skipUrlUpdate) {
+        window.history.pushState(null, "", `#${sectionId}`);
+      }
+    }
   };
-
-  // ✅ Merch routing
   const openMerchProduct = (slug: string) => {
-    navigate(`/merch/${slug}`);
+    setSelectedMerchSlug(slug);
+    window.history.pushState(null, "", `#merch/${slug}`);
+    if (activeSection !== "merch") {
+      scrollToSection("merch", true);
+    }
   };
-
   const closeMerchProduct = () => {
-    navigate("/merch");
+    setSelectedMerchSlug(null);
+    window.history.pushState(null, "", "#merch");
   };
-
-  // ✅ News routing
   const openNewsItem = (slug: string) => {
-    navigate(`/news/${slug}`);
+    setSelectedNewsSlug(slug);
+    window.history.pushState(null, "", `#news/${slug}`);
   };
-
   const closeNewsItem = () => {
-    navigate("/news");
+    setSelectedNewsSlug(null);
+    window.history.pushState(null, "", "#news");
   };
-
   return (
     <div className="min-h-screen">
       <Navigation
@@ -143,5 +114,4 @@ function App() {
     </div>
   );
 }
-
 export default App;
