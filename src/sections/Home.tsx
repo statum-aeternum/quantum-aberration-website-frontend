@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from "react";
 import { useBackgroundParallax } from "../utils/useBackgroundParallax";
 import { getGalaxyAssets } from "../utils/useGalaxyAssets";
+import { Metadata } from "react";
 
 const Home = () => {
   const starsRef = useRef<HTMLDivElement>(null);
@@ -75,3 +76,8 @@ const Home = () => {
 };
 
 export default Home;
+
+export const metadata: Metadata = {
+  title: "Home | Quantum Aberration",
+  description: "Home",
+};
