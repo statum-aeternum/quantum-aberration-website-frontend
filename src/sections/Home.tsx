@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from "react";
 import { useBackgroundParallax } from "../utils/useBackgroundParallax";
 import { getGalaxyAssets } from "../utils/useGalaxyAssets";
+import { Helmet } from "react-helmet";
 
 const Home = () => {
   const starsRef = useRef<HTMLDivElement>(null);
@@ -45,6 +46,17 @@ const Home = () => {
         className="galaxy-layer opacity-30"
         style={{ backgroundImage: `url(${assets.rays})` }}
       />
+
+      <Helmet>
+        <title>Quantum Aberration</title>
+        <meta name="description" content="Death Metal Technique Parisien" />
+        <meta property="og:title" content="Quantum Aberration" />
+        <meta
+          property="og:description"
+          content="Death Metal Technique Parisien"
+        />
+        <meta property="og:type" content="section" />
+      </Helmet>
 
       <section
         id="home"
